@@ -1,19 +1,19 @@
 import express from 'express';
 import * as bodyParser from 'body-parser';
 import cors from 'cors';
-import config from '../config';
 import passport from 'passport';
 import * as swaggerUI from 'swagger-ui-express';
 import { db } from './db';
 import { RegisterRoutes } from '../lib/routes/routes';
 import { errorHandler } from "./middleware/errorHandling";
+
+
 const swaggerJSON = require('./swagger/swagger.json');
 
 
 class App {
 
     public app: express.Express;
-    public dbUri: string = config.database;
 
     constructor() {
         this.app = express();
@@ -27,7 +27,7 @@ class App {
     }
 
     private config(): void {
-
+        
         this.app.use(bodyParser.json({ limit: '5mb' }));
         this.app.use(bodyParser.urlencoded({ limit: '5mb', extended: true, parameterLimit: 5000 }));
 
@@ -56,11 +56,6 @@ class App {
         // await db.sequelize.sync();
     }
 
-
-    // private mongoSetup(): void {
-    //     mongoose.Promise = global.Promise;
-    //     mongoose.connect(this.mongoUrl);
-    // }
 }
 
 export default new App().app;

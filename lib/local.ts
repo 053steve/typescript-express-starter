@@ -1,10 +1,16 @@
 // import * as fs from 'fs';
 // import * as https from 'https';
-import config from '../config';
+// import config from '../config';
 import app from './app';
+import path from 'path';
 
-app.listen(config.port, () => {
-    console.log('Express server listening on port ' + config.port);
+
+
+
+
+app.listen(process.env.PORT, () => {
+    
+    console.log('Express server listening on port ' + process.env.PORT);
 });
 
 // for http2

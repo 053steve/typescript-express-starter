@@ -1,19 +1,21 @@
 
 require('./patches/pgEnum-fix');
-import { Sequelize, DataType } from 'sequelize';
+import { Dialect, Sequelize } from 'sequelize';
 import config from '../config';
 import {DB} from "./common/interfaces";
 import glob from 'glob';
+
 
 const capitalize = (s) => {
     if (typeof s !== 'string') return ''
     return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
+
 export const sequelize = new Sequelize(config.dbConfig.database, config.dbConfig.username, config.dbConfig.password,{
     host: config.dbConfig.host,
-    port: config.dbConfig.port,
-    dialect: config.dbConfig.dialect,
+    port: Number(config.dbConfig.port),
+    dialect: config.dbConfig.dialect as Dialect,
     pool: config.dbConfig.pool,
 });
 
