@@ -1,0 +1,34 @@
+{
+
+
+  "entryFile": "lib/app.ts",
+  "noImplicitAdditionalProperties": "silently-remove-extras",
+  "controllerPathGlobs": ["lib/**/*controller.ts"],
+  "spec": {
+    "host": "localhost:4000",
+    "info": {
+      "description": "",
+      "version": "1.0.0",
+      "title": "angular-typescript-starter"
+    },
+    "schemes": [ "http" ],
+    "outputDirectory": "lib/swagger",
+    "specVersion": 3,
+    "securityDefinitions": {
+      "jwt": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "routes": {
+    "routesDir": "lib/routes",
+    "entryFile": "lib/app.ts",
+    "authenticationModule": "lib/middleware/authentication.ts"
+  },
+  "ignore": [
+    "**/node_modules/sequelize/**",
+    "**/node_modules/sequelize-typescript/**"
+  ]
+}

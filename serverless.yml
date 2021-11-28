@@ -1,0 +1,37 @@
+service:
+  name: angular-typescript-starter
+custom:
+  secrets: ${file(secrets.json)}
+#app: your-app-name
+#tenant: your-tenant-name
+
+# Add the serverless-webpack plugin
+plugins:
+  # - serverless-webpack
+#   - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  profile: none
+  memorySize: 192
+  timeout: 10
+  stage: production
+  region: ap-southeast-1
+
+  environment:
+    NODE_ENV: ${self:custom.secrets.NODE_ENV}
+
+functions:
+  app:
+    handler: dist/server.http
+    events:
+      - http:
+          path: /
+          method: ANY
+          cors: true
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors: true
+
