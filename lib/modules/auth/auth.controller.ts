@@ -26,7 +26,7 @@ export class AuthController {
             switch (authType) {
                 case AuthType.STANDARD:
 
-                    result = await new AuthService().authenticate(requestBody);
+                    result = await new AuthService().authenticate(req);
                     break;
 
                 case AuthType.W3_WALLET:

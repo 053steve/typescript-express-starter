@@ -18,15 +18,13 @@ passport.use('local', new Strategy({
       return done(null, false, {message: 'Incorrect Username'}); 
     }
     
-    try {
-      const isMatch = await user.validatePassword(password);
 
-      if (!isMatch) { return done(null, false, {message: 'Incorrect Password'}); }      
+    const isMatch = await user.validatePassword(password);
 
-      done(null, user);
-    } catch (err) {
-      done(err);
-    }
+    if (!isMatch) { return done(null, false, {message: 'Incorrect Password'}); }
+
+    done(null, user);
+
   } catch (err) {
 
     return done(err);

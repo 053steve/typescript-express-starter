@@ -1,4 +1,4 @@
-# Only-Bu
+# Express Typescript Starter
 
 ## Specs
 2. Typescript + TSOA (Open-API)
