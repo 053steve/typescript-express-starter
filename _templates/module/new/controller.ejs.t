@@ -28,8 +28,8 @@ export class <%= h.capitalize(name) %>Controller {
 
   @Post('create')
   @Tags('<%=name%>')
-  public async create<%= h.capitalize(name) %>(@Body() requestBody: <%= h.capitalize(name) %>Req, @Request() req: express.Request): Promise<<%= h.capitalize(name) %>Response> {
-      const response = (<any>req).res as express.Response;
+  public async create<%= h.capitalize(name) %>(@Body() requestBody: <%= h.capitalize(name) %>Req, @Request() req: any): Promise<<%= h.capitalize(name) %>Response> {
+      const response = (<any>req).res;
       const result: <%= h.capitalize(name) %>Payload = await new <%= h.capitalize(name) %>Service().createNew<%= h.capitalize(name) %>(requestBody)
       response.status(201);
       const <%=name%>Response: <%= h.capitalize(name) %>Response = {
