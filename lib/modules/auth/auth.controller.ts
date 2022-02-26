@@ -1,4 +1,4 @@
-import {Body, Post, Request, Route, Tags,} from "tsoa";
+import {Body, Post, Request, Route, Tags, SuccessResponse} from "tsoa";
 
 import {AuthService} from './auth.service';
 
@@ -9,11 +9,12 @@ import {validateAuthReq} from '../../common/utils/auth';
 
 @Route("auth")
 export class AuthController {
+    @SuccessResponse('201', 'Created')
     @Post()
     @Tags('auth')
     public async auth(@Body() requestBody: AuthRequest, @Request() req: any): Promise<AuthPayload> {
         try {
-            // const result = await new AuthService().authenticate(req);
+            const response = req.res
             const authType = requestBody.authType;
             let result;
 
@@ -37,6 +38,8 @@ export class AuthController {
                 default:
                     throw new ApiError(false, "Login Error", 500, 'no auth type set');
             }
+
+            response.status(201);
 
             return {
                 user: result.user,

@@ -16,6 +16,7 @@ import {
   Delete,
   Tags,
   Security,
+  SuccessResponse
 } from "tsoa";
 import * as express from 'express';
 import { <%= h.capitalize(name) %>Service } from './<%=name%>.service';
@@ -27,8 +28,10 @@ export class <%= h.capitalize(name) %>Controller {
 
   @Post('create')
   @Tags('<%=name%>')
-  public async create<%= h.capitalize(name) %>(@Body() requestBody: <%= h.capitalize(name) %>Req): Promise<<%= h.capitalize(name) %>Response> {
+  public async create<%= h.capitalize(name) %>(@Body() requestBody: <%= h.capitalize(name) %>Req, @Request() req: express.Request): Promise<<%= h.capitalize(name) %>Response> {
+      const response = (<any>req).res as express.Response;
       const result: <%= h.capitalize(name) %>Payload = await new <%= h.capitalize(name) %>Service().createNew<%= h.capitalize(name) %>(requestBody)
+      response.status(201);
       const <%=name%>Response: <%= h.capitalize(name) %>Response = {
           success: true,
           payload: {
