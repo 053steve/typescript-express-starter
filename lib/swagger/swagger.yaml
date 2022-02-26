@@ -1,0 +1,455 @@
+components:
+  examples: {}
+  headers: {}
+  parameters: {}
+  requestBodies: {}
+  responses: {}
+  schemas:
+    IUser:
+      additionalProperties: false
+      type: object
+    AuthPayload:
+      properties:
+        user:
+          $ref: '#/components/schemas/IUser'
+        token:
+          type: string
+      type: object
+      additionalProperties: false
+    Nullable_string_:
+      type: string
+      nullable: true
+    AuthType:
+      enum:
+        - STANDARD
+        - W3_WALLET
+      type: string
+    AuthRequest:
+      properties:
+        username:
+          $ref: '#/components/schemas/Nullable_string_'
+        password:
+          $ref: '#/components/schemas/Nullable_string_'
+        authType:
+          $ref: '#/components/schemas/AuthType'
+        signature:
+          $ref: '#/components/schemas/Nullable_string_'
+        publicKey:
+          $ref: '#/components/schemas/Nullable_string_'
+      required:
+        - authType
+      type: object
+      additionalProperties: false
+    USER_TYPE:
+      type: string
+      enum:
+        - ADMIN
+        - STAFF
+        - USER
+    Pick_IUser.firstname-or-lastname-or-username-or-email-or-user_type-or-createdAt-or-updatedAt_:
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        user_type:
+          $ref: '#/components/schemas/USER_TYPE'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - firstname
+        - lastname
+        - username
+        - email
+        - user_type
+      type: object
+      description: From T, pick a set of properties whose keys are in the union K
+    ISafeUser:
+      $ref: '#/components/schemas/Pick_IUser.firstname-or-lastname-or-username-or-email-or-user_type-or-createdAt-or-updatedAt_'
+    UserPayload:
+      properties:
+        user:
+          $ref: '#/components/schemas/ISafeUser'
+        users:
+          items:
+            $ref: '#/components/schemas/ISafeUser'
+          type: array
+        userLength:
+          type: number
+          format: double
+        token:
+          type: string
+        nonce:
+          type: string
+      type: object
+      additionalProperties: false
+    UserResponse:
+      properties:
+        success:
+          type: boolean
+        payload:
+          $ref: '#/components/schemas/UserPayload'
+        message: {}
+      required:
+        - success
+      type: object
+      additionalProperties: false
+    Nullable_USER_TYPE_:
+      allOf:
+        - $ref: '#/components/schemas/USER_TYPE'
+      nullable: true
+    UserCreateReq:
+      properties:
+        firstname:
+          $ref: '#/components/schemas/Nullable_string_'
+        lastname:
+          $ref: '#/components/schemas/Nullable_string_'
+        username:
+          type: string
+        password:
+          type: string
+        user_type:
+          $ref: '#/components/schemas/Nullable_USER_TYPE_'
+        email:
+          type: string
+      required:
+        - username
+        - password
+        - email
+      type: object
+      additionalProperties: false
+    NonceReq:
+      properties:
+        publicKey:
+          type: string
+      required:
+        - publicKey
+      type: object
+      additionalProperties: false
+    UserUpdateReq:
+      properties:
+        firstname:
+          $ref: '#/components/schemas/Nullable_string_'
+        lastname:
+          $ref: '#/components/schemas/Nullable_string_'
+        username:
+          type: string
+        password:
+          type: string
+        user_type:
+          $ref: '#/components/schemas/Nullable_USER_TYPE_'
+        email:
+          type: string
+      required:
+        - username
+        - password
+        - email
+      type: object
+      additionalProperties: false
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+info:
+  title: angular-typescript-starter
+  version: 1.0.0
+  description: BE
+  license:
+    name: MIT
+  contact:
+    name: 053steve
+openapi: 3.0.0
+paths:
+  /auth:
+    post:
+      operationId: Auth
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthPayload'
+      tags:
+        - auth
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+  /user/search:
+    get:
+      operationId: SearchUser
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+      tags:
+        - user
+      security:
+        - jwt: []
+      parameters:
+        - in: query
+          name: username
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: email
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: firstname
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: lastname
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: pageNumber
+          required: false
+          schema:
+            format: double
+            type: number
+        - in: query
+          name: pageSize
+          required: false
+          schema:
+            format: double
+            type: number
+        - in: query
+          name: filter
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sortOrder
+          required: false
+          schema:
+            type: string
+  /user/create:
+    post:
+      operationId: CreateUser
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPayload'
+      tags:
+        - user
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateReq'
+  /user/create/nonce:
+    post:
+      operationId: GetOrCreateNonce
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPayload'
+      tags:
+        - user
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NonceReq'
+  /user/list:
+    get:
+      operationId: GetAllUsers
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPayload'
+      tags:
+        - user
+      security:
+        - jwt: []
+      parameters:
+        - in: query
+          name: pageNumber
+          required: false
+          schema:
+            format: double
+            type: number
+        - in: query
+          name: pageSize
+          required: false
+          schema:
+            format: double
+            type: number
+        - in: query
+          name: filter
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sortOrder
+          required: false
+          schema:
+            type: string
+  /user/detail/{userId}:
+    get:
+      operationId: GetUser
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPayload'
+      tags:
+        - user
+      security:
+        - jwt: []
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+  /user/update/{userId}:
+    put:
+      operationId: UpdateUser
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPayload'
+      tags:
+        - user
+      security:
+        - jwt: []
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateReq'
+  /user/delete/{userId}:
+    delete:
+      operationId: DeleteUser
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPayload'
+      tags:
+        - user
+      security:
+        - jwt: []
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+  /user/{user_type}:
+    get:
+      operationId: GetUserByUserType
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPayload'
+      tags:
+        - user
+      security:
+        - jwt: []
+      parameters:
+        - in: path
+          name: user_type
+          required: true
+          schema:
+            $ref: '#/components/schemas/USER_TYPE'
+        - in: query
+          name: username
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: email
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: firstName
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: lastName
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: pageNumber
+          required: false
+          schema:
+            format: double
+            type: number
+        - in: query
+          name: pageSize
+          required: false
+          schema:
+            format: double
+            type: number
+        - in: query
+          name: filter
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sortOrder
+          required: false
+          schema:
+            type: string
+servers:
+  - url: http://localhost:4000/

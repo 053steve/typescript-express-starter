@@ -22,22 +22,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"AuthResponses": {
-				"properties": {
-					"success": {
-						"type": "boolean"
-					},
-					"payload": {
-						"$ref": "#/components/schemas/AuthPayload"
-					},
-					"message": {}
-				},
-				"required": [
-					"success"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"Nullable_string_": {
 				"type": "string",
 				"nullable": true
@@ -270,7 +254,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/AuthResponses"
+									"$ref": "#/components/schemas/AuthPayload"
 								}
 							}
 						}
@@ -395,7 +379,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/UserResponse"
+									"$ref": "#/components/schemas/UserPayload"
 								}
 							}
 						}
@@ -427,7 +411,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/UserResponse"
+									"$ref": "#/components/schemas/UserPayload"
 								}
 							}
 						}
@@ -459,7 +443,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/UserResponse"
+									"$ref": "#/components/schemas/UserPayload"
 								}
 							}
 						}
@@ -520,7 +504,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/UserResponse"
+									"$ref": "#/components/schemas/UserPayload"
 								}
 							}
 						}
@@ -555,7 +539,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/UserResponse"
+									"$ref": "#/components/schemas/UserPayload"
 								}
 							}
 						}
@@ -600,7 +584,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/UserResponse"
+									"$ref": "#/components/schemas/UserPayload"
 								}
 							}
 						}
@@ -635,7 +619,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/UserResponse"
+									"$ref": "#/components/schemas/UserPayload"
 								}
 							}
 						}

@@ -51,29 +51,21 @@ export class UserController {
 
     @Post('create')
     @Tags('user')
-    public async createUser(@Body() requestBody: UserCreateReq): Promise<UserResponse> {
+    public async createUser(@Body() requestBody: UserCreateReq): Promise<UserPayload> {
         const result: UserPayload = await new UserService().createNewUser(requestBody)
-        const userResponse: UserResponse = {
-            success: true,
-            payload: {
-                user: result.user,
-                token: result.token
-            }
+        return {
+            user: result.user,
+            token: result.token
         }
-        return userResponse;
     }
 
 
     @Post('create/nonce')
     @Tags('user')
-    public async getOrCreateNonce(@Body() requestBody: NonceReq): Promise<UserResponse> {
+    public async getOrCreateNonce(@Body() requestBody: NonceReq): Promise<UserPayload> {
 
-        const payload: UserPayload = await new UserService().getOrCreateNonce(requestBody)
-        const userResponse: UserResponse = {
-            success: true,
-            payload
-        }
-        return userResponse;
+        return await new UserService().getOrCreateNonce(requestBody)
+        
     }
 
     @Security("jwt")
@@ -85,33 +77,23 @@ export class UserController {
         @Query() filter?: string,
         @Query() sortOrder?: string,
         @Request() req?: express.Request
-    ): Promise<UserResponse> {
+    ): Promise<UserPayload> {
         const result: UserPayload = await new UserService().getAllUsers(req.query);
-        const userResponse: UserResponse = {
-            success: true,
-            payload: {
-                users: result.users,
-                userLength: result.userLength
-            }
+        return {
+            users: result.users,
+            userLength: result.userLength
         }
-
-        return userResponse;
     }
 
     @Security("jwt")
     @Get("detail/{userId}")
     @Tags('user')
-    public async getUser(@Path() userId: string): Promise<UserResponse> {
+    public async getUser(@Path() userId: string): Promise<UserPayload> {
 
         const result: UserPayload = await new UserService().getUserById(userId);
-        const userResponse: UserResponse = {
-            success: true,
-            payload: {
-                user: result.user
-            }
-        }
-
-        return userResponse;
+        return {
+            user: result.user
+        };
 
     }
 
@@ -121,20 +103,15 @@ export class UserController {
     public async updateUser(
         @Path() userId: string,
         @Body() user: UserUpdateReq
-    ) :Promise<UserResponse> {
+    ) :Promise<UserPayload> {
 
         const userService = new UserService();
         const getUserResult: UserPayload = await userService.getUserById(userId);
         const updatedUserResult = await userService.updateUser(getUserResult.user, user);
 
-        const userResponse: UserResponse = {
-            success: true,
-            payload: {
-                user: updatedUserResult.user
-            }
-        }
-
-        return userResponse;
+        return {
+            user: updatedUserResult.user
+        };
 
     }
 
@@ -143,18 +120,13 @@ export class UserController {
     @Tags('user')
     public async deleteUser(
         @Path() userId: string
-    ): Promise<UserResponse> {
+    ): Promise<UserPayload> {
 
         const userService = new UserService();
         const getUserResult: UserPayload = await userService.getUserById(userId);
         await userService.deleteUser(getUserResult.user);
 
-        const userResponse: UserResponse = {
-            success: true,
-        }
-
-        return userResponse;
-
+        return;
     }
 
 
@@ -172,7 +144,7 @@ export class UserController {
         @Query() filter?: string,
         @Query() sortOrder?: string,
         @Request() req?: express.Request
-    ): Promise<UserResponse> {
+    ): Promise<UserPayload> {
 
         const userService = new UserService();
         const query = {
@@ -187,15 +159,10 @@ export class UserController {
         const result: UserPayload = await userService.getUserByUserType(query);
 
 
-        const userResponse: UserResponse = {
-            success: true,
-            payload: {
-                users: result.users,
-                userLength: result.userLength
-            }
-        }
-
-        return userResponse;
+        return {
+            users: result.users,
+            userLength: result.userLength
+        };
 
     }
 

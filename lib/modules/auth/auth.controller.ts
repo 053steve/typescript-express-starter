@@ -2,7 +2,7 @@ import {Body, Post, Request, Route, Tags,} from "tsoa";
 
 import {AuthService} from './auth.service';
 
-import {AuthRequest, AuthResponses, AuthType} from "./auth.interface";
+import {AuthRequest, AuthResponses, AuthType, AuthPayload} from "./auth.interface";
 import {ApiError} from "../../common/utils/apiError";
 import {validateAuthReq} from '../../common/utils/auth';
 
@@ -11,7 +11,7 @@ import {validateAuthReq} from '../../common/utils/auth';
 export class AuthController {
     @Post()
     @Tags('auth')
-    public async auth(@Body() requestBody: AuthRequest, @Request() req: any): Promise<AuthResponses> {
+    public async auth(@Body() requestBody: AuthRequest, @Request() req: any): Promise<AuthPayload> {
         try {
             // const result = await new AuthService().authenticate(req);
             const authType = requestBody.authType;
@@ -39,11 +39,8 @@ export class AuthController {
             }
 
             return {
-                success: true,
-                payload: {
-                    user: result.user,
-                    token: result.token
-                }
+                user: result.user,
+                token: result.token
             };
         } catch (err) {
             throw new ApiError(false, "Login Error", err.status, err.message);
